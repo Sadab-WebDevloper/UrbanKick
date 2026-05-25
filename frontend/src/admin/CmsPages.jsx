@@ -20,7 +20,12 @@ const CmsPages = () => {
       const response = await axios.get(`${API_URL}/api/pages/cms-pages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setPages(response.data);
+      if (response.data && Array.isArray(response.data)) {
+        setPages(response.data);
+      } else {
+        console.error('API did not return an array for CMS pages:', response.data);
+        setPages([]);
+      }
     } catch (error) {
       console.error('Error fetching CMS pages:', error);
     } finally {

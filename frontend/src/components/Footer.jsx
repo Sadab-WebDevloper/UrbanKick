@@ -10,9 +10,13 @@ const Footer = () => {
     const fetchCmsPages = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/pages`);
-        // Filter out drafts if the backend hasn't already (though it should)
-        const publishedPages = response.data.filter(p => p.isPublished !== false);
-        setCmsPages(publishedPages);
+        if (response.data && Array.isArray(response.data)) {
+          const publishedPages = response.data.filter(p => p.isPublished !== false);
+          setCmsPages(publishedPages);
+        } else {
+          console.error('API did not return an array for CMS pages:', response.data);
+          setCmsPages([]);
+        }
       } catch (error) {
         console.error('Error fetching CMS pages for footer:', error);
       }
