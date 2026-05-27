@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
+  const { isAuthenticated } = useAuth();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -12,19 +14,19 @@ const Home = () => {
   // Hero Slider Images
   const heroSlides = [
     {
-      image: '/Nike-sports-shoes.jpg',
+      image: '/Nike-Air-Max.jpg',
       title: 'Step Into',
       subtitle: 'Your Style',
       description: 'Discover premium sneakers that define your unique journey'
     },
     {
-      image: '/Nike Runner.jpg',
+      image: '/low-dunk.jpg',
       title: 'Elevate Your',
       subtitle: 'Game',
       description: 'Performance meets style in our exclusive collection'
     },
     {
-      image: '/Nike SB Dunk Low.jpg',
+      image: "/Nike AJ's 1.jpg",
       title: 'Walk With',
       subtitle: 'Confidence',
       description: 'Premium quality sneakers for every occasion'
@@ -33,16 +35,50 @@ const Home = () => {
 
   useEffect(() => {
     fetchFeaturedProducts();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [heroSlides.length]);
+  }, [currentSlide, heroSlides.length]);
 
   const fetchFeaturedProducts = async () => {
+    if (!isAuthenticated) {
+      setFeaturedProducts([
+        {
+          _id: 'dummy-1',
+          name: 'Urban Glide',
+          description: 'Experience premium comfort with our signature streetwear classic.',
+          price: 4999,
+          category: 'Streetwear',
+          image: '/Nike-Air-Max.jpg',
+          featured: true
+        },
+        {
+          _id: 'dummy-2',
+          name: 'Velocity Runner X',
+          description: 'Engineered for maximum speed and style on the tracks.',
+          price: 6599,
+          category: 'Running',
+          image: '/low-dunk.jpg',
+          featured: true
+        },
+        {
+          _id: 'dummy-3',
+          name: 'Classic Court Low',
+          description: 'Timeless design meets modern durability.',
+          price: 5299,
+          category: 'Casual',
+          image: "/Nike AJ's 1.jpg",
+          featured: true
+        }
+      ]);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get(`${API_URL}/api/products/featured`);
       setFeaturedProducts(response.data);
@@ -109,11 +145,11 @@ const Home = () => {
 
                   {/* Image */}
                   <div className="relative animate-fade-in flex justify-center mt-4 lg:mt-0">
-                    <div className="relative rounded-[2rem] lg:rounded-[3rem] overflow-hidden shadow-2xl border border-white/10 bg-white/5 aspect-square max-w-[200px] sm:max-w-[320px] lg:max-w-[460px] w-full flex items-center justify-center p-4 lg:p-6">
+                    <div className="relative rounded-[2rem] lg:rounded-[3rem] overflow-hidden shadow-2xl border border-white/10 bg-white/5 aspect-square max-w-[200px] sm:max-w-[320px] lg:max-w-[460px] w-full flex items-center justify-center">
                       <img
                         src={slide.image}
                         alt={`Slide ${index + 1}`}
-                        className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-700 animate-float"
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                       />
                     </div>
                     <div className="absolute -bottom-4 right-4 md:right-10 bg-accent text-white px-4 py-2 lg:px-8 lg:py-4 rounded-2xl lg:rounded-3xl shadow-2xl shadow-accent/30 border border-white/10 transform hover:scale-105 transition-all">
@@ -130,19 +166,19 @@ const Home = () => {
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/5 hover:bg-white/15 text-white border border-white/10 p-4 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 backdrop-blur-md"
+          className="absolute left-2 sm:left-4 lg:left-8 top-[72%] sm:top-[75%] md:top-1/2 -translate-y-1/2 z-20 bg-white/5 hover:bg-white/15 text-white border border-white/10 p-3 md:p-4 rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 backdrop-blur-md"
           aria-label="Previous slide"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/5 hover:bg-white/15 text-white border border-white/10 p-4 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 backdrop-blur-md"
+          className="absolute right-2 sm:right-4 lg:right-8 top-[72%] sm:top-[75%] md:top-1/2 -translate-y-1/2 z-20 bg-white/5 hover:bg-white/15 text-white border border-white/10 p-3 md:p-4 rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 backdrop-blur-md"
           aria-label="Next slide"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>

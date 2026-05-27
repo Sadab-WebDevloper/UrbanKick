@@ -4,26 +4,6 @@ import axios from 'axios';
 import { API_URL } from '../config/api';
 
 const Footer = () => {
-  const [cmsPages, setCmsPages] = useState([]);
-
-  useEffect(() => {
-    const fetchCmsPages = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/pages`);
-        if (response.data && Array.isArray(response.data)) {
-          const publishedPages = response.data.filter(p => p.isPublished !== false);
-          setCmsPages(publishedPages);
-        } else {
-          console.error('API did not return an array for CMS pages:', response.data);
-          setCmsPages([]);
-        }
-      } catch (error) {
-        console.error('Error fetching CMS pages for footer:', error);
-      }
-    };
-
-    fetchCmsPages();
-  }, []);
 
   return (
     <footer className="bg-zinc-950 text-white mt-auto border-t border-white/5 overflow-hidden">
@@ -107,23 +87,9 @@ const Footer = () => {
             <div className="min-w-[120px]">
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-6 text-gray-500">Support</h4>
               <div className="flex flex-col space-y-3">
-                {cmsPages.length > 0 ? (
-                  cmsPages.map(page => (
-                    <Link 
-                      key={page._id} 
-                      to={`/pages/${page.slug}`} 
-                      className="text-sm font-bold text-gray-300 hover:text-accent transition-colors"
-                    >
-                      {page.title}
-                    </Link>
-                  ))
-                ) : (
-                  <>
-                    <Link to="/pages/privacy-policy" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Privacy Policy</Link>
-                    <Link to="/pages/terms-conditions" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Terms of Service</Link>
-                    <Link to="/contact" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Help & FAQ</Link>
-                  </>
-                )}
+                <Link to="/pages/privacy-policy" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Privacy Policy</Link>
+                <Link to="/pages/terms-conditions" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Terms of Service</Link>
+                <Link to="/pages/help-faq" className="text-sm font-bold text-gray-300 hover:text-accent transition-colors">Help & FAQ</Link>
               </div>
             </div>
           </div>

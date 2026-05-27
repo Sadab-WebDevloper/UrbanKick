@@ -4,13 +4,25 @@ import { Link } from 'react-router-dom';
 import { API_URL } from '../config/api';
 import { Sparkles, ArrowRight, ShoppingBag } from 'lucide-react';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 const NewArrivals = () => {
+  const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if (!isAuthenticated) {
+        setProducts([
+          { _id: 'dummy-1', name: 'Urban Glide', price: 4999, category: 'Streetwear', image: '/Nike-sports-shoes.jpg' },
+          { _id: 'dummy-2', name: 'Velocity Runner X', price: 6599, category: 'Running', image: '/Nike Runner.jpg' },
+          { _id: 'dummy-3', name: 'Classic Court Low', price: 5299, category: 'Casual', image: '/Nike SB Dunk Low.jpg' }
+        ]);
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(`${API_URL}/api/products/new-arrivals`);
         setProducts(response.data.slice(0, 8));
@@ -21,7 +33,7 @@ const NewArrivals = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="min-h-screen bg-transparent pt-24 pb-16">

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 import { SearchX, Plus, Search, SlidersHorizontal } from 'lucide-react';
 
 const Products = () => {
+  const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -18,9 +20,43 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [isAuthenticated]);
 
   const fetchProducts = async () => {
+    if (!isAuthenticated) {
+      setProducts([
+        {
+          _id: 'dummy-1',
+          name: 'Urban Glide',
+          description: 'Experience premium comfort with our signature streetwear classic.',
+          price: 4999,
+          category: 'Streetwear',
+          image: '/Nike-sports-shoes.jpg',
+          stock: 15
+        },
+        {
+          _id: 'dummy-2',
+          name: 'Velocity Runner X',
+          description: 'Engineered for maximum speed and style on the tracks.',
+          price: 6599,
+          category: 'Running',
+          image: '/Nike Runner.jpg',
+          stock: 5
+        },
+        {
+          _id: 'dummy-3',
+          name: 'Classic Court Low',
+          description: 'Timeless design meets modern durability.',
+          price: 5299,
+          category: 'Casual',
+          image: '/Nike SB Dunk Low.jpg',
+          stock: 0
+        }
+      ]);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get(`${API_URL}/api/products`);
       setProducts(response.data);

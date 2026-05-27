@@ -4,13 +4,25 @@ import axios from 'axios';
 import { API_URL } from '../config/api';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 const RelatedProducts = ({ currentId, category }) => {
+  const { isAuthenticated } = useAuth();
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadRelated = async () => {
+      if (!isAuthenticated) {
+        setRelated([
+          { _id: 'dummy-1', name: 'Urban Glide', price: 4999, category: 'Streetwear', image: '/Nike-sports-shoes.jpg' },
+          { _id: 'dummy-2', name: 'Velocity Runner X', price: 6599, category: 'Running', image: '/Nike Runner.jpg' },
+          { _id: 'dummy-3', name: 'Classic Court Low', price: 5299, category: 'Casual', image: '/Nike SB Dunk Low.jpg' }
+        ]);
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(`${API_URL}/api/products`);
         const sameCategory = response.data
@@ -27,7 +39,7 @@ const RelatedProducts = ({ currentId, category }) => {
       }
     };
     loadRelated();
-  }, [currentId, category]);
+  }, [currentId, category, isAuthenticated]);
 
   if (loading) {
     return <div className="text-sm text-gray-500">Loading related products...</div>;
@@ -67,6 +79,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
@@ -74,6 +87,24 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      if (!isAuthenticated) {
+        setProduct({
+          _id: id,
+          name: 'Dummy Sneaker',
+          description: 'Experience premium comfort with our signature streetwear classic. This is a dummy product because you are not logged in.',
+          price: 4999,
+          category: 'Streetwear',
+          image: '/Nike-sports-shoes.jpg',
+          stock: 10,
+          sizes: ['7', '8', '9', '10'],
+          colors: ['Black', 'White']
+        });
+        setSelectedSize('7');
+        setSelectedColor('Black');
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(response.data);
@@ -91,7 +122,7 @@ const ProductDetail = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   if (loading) {
     return (
