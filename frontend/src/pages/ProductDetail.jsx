@@ -164,7 +164,7 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 p-8">
             <div className="bg-white/5 rounded-[2rem] overflow-hidden flex items-center justify-center p-8 border border-white/5">
               <img
-                src={product.image.startsWith('http') ? product.image : `${API_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
+                src={product.image?.startsWith('http') ? product.image : product.image?.startsWith('/uploads') ? `${API_URL}${product.image}` : product.image}
                 alt={product.name}
                 className="w-full max-w-[380px] max-h-[380px] object-contain transition-transform duration-500 hover:scale-105"
               />

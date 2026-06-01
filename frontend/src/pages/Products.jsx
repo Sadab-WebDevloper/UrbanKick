@@ -28,7 +28,7 @@ const Products = () => {
             description: 'Experience premium comfort with our signature streetwear classic.',
             price: 4999,
             category: 'Streetwear',
-            image: '/Nike-sports-shoes.jpg',
+            image: '/Nike Runner.jpg',
             stock: 15
           },
           {
@@ -172,7 +172,7 @@ const Products = () => {
                 >
                   <div className="relative aspect-square bg-white/5 rounded-[2rem] overflow-hidden mb-6 flex items-center justify-center">
                     <img
-                      src={product.image.startsWith('http') ? product.image : `${API_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
+                      src={product.image?.startsWith('http') ? product.image : product.image?.startsWith('/uploads') ? `${API_URL}${product.image}` : product.image}
                       alt={product.name}
                       className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                     />
