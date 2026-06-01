@@ -34,60 +34,60 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    fetchFeaturedProducts();
-  }, [isAuthenticated]);
-
-  useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
   }, [currentSlide, heroSlides.length]);
 
-  const fetchFeaturedProducts = async () => {
-    if (!isAuthenticated) {
-      setFeaturedProducts([
-        {
-          _id: 'dummy-1',
-          name: 'Urban Glide',
-          description: 'Experience premium comfort with our signature streetwear classic.',
-          price: 4999,
-          category: 'Streetwear',
-          image: '/Nike-Air-Max.jpg',
-          featured: true
-        },
-        {
-          _id: 'dummy-2',
-          name: 'Velocity Runner X',
-          description: 'Engineered for maximum speed and style on the tracks.',
-          price: 6599,
-          category: 'Running',
-          image: '/low-dunk.jpg',
-          featured: true
-        },
-        {
-          _id: 'dummy-3',
-          name: 'Classic Court Low',
-          description: 'Timeless design meets modern durability.',
-          price: 5299,
-          category: 'Casual',
-          image: "/Nike AJ's 1.jpg",
-          featured: true
-        }
-      ]);
-      setLoading(false);
-      return;
-    }
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      if (!isAuthenticated) {
+        setFeaturedProducts([
+          {
+            _id: 'dummy-1',
+            name: 'Urban Glide',
+            description: 'Experience premium comfort with our signature streetwear classic.',
+            price: 4999,
+            category: 'Streetwear',
+            image: '/Nike-Air-Max.jpg',
+            featured: true
+          },
+          {
+            _id: 'dummy-2',
+            name: 'Velocity Runner X',
+            description: 'Engineered for maximum speed and style on the tracks.',
+            price: 6599,
+            category: 'Running',
+            image: '/low-dunk.jpg',
+            featured: true
+          },
+          {
+            _id: 'dummy-3',
+            name: 'Classic Court Low',
+            description: 'Timeless design meets modern durability.',
+            price: 5299,
+            category: 'Casual',
+            image: "/Nike AJ's 1.jpg",
+            featured: true
+          }
+        ]);
+        setLoading(false);
+        return;
+      }
 
-    try {
-      const response = await axios.get(`${API_URL}/api/products/featured`);
-      setFeaturedProducts(response.data);
-    } catch (error) {
-      console.error('Error fetching featured products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const response = await axios.get(`${API_URL}/api/products/featured`);
+        setFeaturedProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, [isAuthenticated]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
