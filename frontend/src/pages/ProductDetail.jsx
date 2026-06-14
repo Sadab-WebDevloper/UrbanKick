@@ -4,10 +4,8 @@ import axios from 'axios';
 import { API_URL } from '../config/api';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
-import { useAuth } from '../context/AuthContext';
 
 const RelatedProducts = ({ currentId, category }) => {
-  const { isAuthenticated } = useAuth();
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +68,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, clearCart } = useCart();
-  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');

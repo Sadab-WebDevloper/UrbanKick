@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import SEO from '../components/SEO';
-import { useAuth } from '../context/AuthContext';
 
 import { SearchX, Plus, Search, SlidersHorizontal } from 'lucide-react';
 
 const Products = () => {
-  const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({

@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import SEO from '../components/SEO';
-import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
-  const { isAuthenticated } = useAuth();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);

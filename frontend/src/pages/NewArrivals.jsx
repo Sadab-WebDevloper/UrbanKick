@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import { API_URL } from '../config/api';
 import { Sparkles, ArrowRight, ShoppingBag } from 'lucide-react';
 import SEO from '../components/SEO';
-import { useAuth } from '../context/AuthContext';
 
 const NewArrivals = () => {
-  const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
