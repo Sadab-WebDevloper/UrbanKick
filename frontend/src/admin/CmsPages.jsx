@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 import { Plus, Edit2, Trash2, ExternalLink, X, AlertCircle } from 'lucide-react';
 
 const CmsPages = () => {
@@ -60,18 +59,19 @@ const CmsPages = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-grow ml-64 p-8">
-        <AdminHeader title="CMS Pages" subtitle="Create and manage static CMS landing pages.">
-          <button
-            onClick={() => navigate('/admin/pages/new')}
-            className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Page</span>
-          </button>
-        </AdminHeader>
+    <AdminLayout 
+      title="CMS Pages" 
+      subtitle="Create and manage static CMS landing pages."
+      headerActions={
+        <button
+          onClick={() => navigate('/admin/pages/new')}
+          className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          <span>Add Page</span>
+        </button>
+      }
+    >
 
         <div className="bg-white rounded-[2rem] shadow-sm border border-gray-50 overflow-hidden">
           <table className="w-full">
@@ -121,8 +121,6 @@ const CmsPages = () => {
             </tbody>
           </table>
         </div>
-      </div>
-
       {showModal && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-primary/20 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 max-w-sm w-full p-6 animate-slide-up relative">
@@ -158,8 +156,7 @@ const CmsPages = () => {
           </div>
         </div>
       )}
-
-    </div>
+    </AdminLayout>
   );
 };
 

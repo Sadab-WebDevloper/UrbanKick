@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Search, Bell, ChevronDown, Settings, LogOut } from 'lucide-react';
+import { Search, Bell, ChevronDown, Settings, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { API_URL } from '../config/api';
 import LogoutModal from './LogoutModal';
 import AccountSettingsModal from './AccountSettingsModal';
 
-const AdminHeader = ({ title, subtitle, children }) => {
+const AdminHeader = ({ title, subtitle, children, onMenuClick }) => {
   const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -20,9 +20,17 @@ const AdminHeader = ({ title, subtitle, children }) => {
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
-        <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight">{title}</h1>
-          {subtitle && <p className="text-xs text-secondary font-medium mt-0.5">{subtitle}</p>}
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={onMenuClick}
+            className="p-2 -ml-2 lg:hidden text-gray-500 hover:bg-gray-100 rounded-xl transition-colors"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-primary tracking-tight">{title}</h1>
+            {subtitle && <p className="text-xs text-secondary font-medium mt-0.5">{subtitle}</p>}
+          </div>
         </div>
 
         {/* Search Bar - Common for Admin */}

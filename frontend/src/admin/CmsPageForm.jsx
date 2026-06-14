@@ -3,8 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css'; // Import quill styles
 
@@ -101,24 +100,21 @@ const CmsPageForm = () => {
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
-    'link', 'image'
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-grow ml-64 p-8">
-        <AdminHeader
-          title={id ? 'Edit CMS Page' : 'Create CMS Page'}
-          subtitle="Publish content pages that render by slug in the frontend."
+    <AdminLayout
+      title={id ? 'Edit CMS Page' : 'Create CMS Page'}
+      subtitle="Publish content pages that render by slug in the frontend."
+      headerActions={
+        <Link
+          to="/admin/pages"
+          className="inline-flex items-center space-x-2 bg-white text-primary border border-primary px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-primary hover:text-white transition-all"
         >
-          <Link
-            to="/admin/pages"
-            className="inline-flex items-center space-x-2 bg-white text-primary border border-primary px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-primary hover:text-white transition-all"
-          >
-            <span>Back to pages</span>
-          </Link>
-        </AdminHeader>
+          <span>Back to pages</span>
+        </Link>
+      }
+    >
 
         <div className="bg-white rounded-[2rem] shadow-sm border border-gray-50 p-8 max-w-4xl">
           {error && (
@@ -178,8 +174,7 @@ const CmsPageForm = () => {
             </button>
           </form>
         </div>
-      </div>
-    </div>
+    </AdminLayout>
   );
 };
 

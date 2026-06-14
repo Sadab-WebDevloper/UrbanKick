@@ -10,9 +10,8 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { API_URL } from '../config/api';
-import Sidebar from '../components/Sidebar';
+import AdminLayout from '../components/AdminLayout';
 import { useAuth } from '../context/AuthContext';
-import AdminHeader from '../components/AdminHeader';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -45,12 +44,11 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-grow flex items-center justify-center bg-gray-50">
+      <AdminLayout>
+        <div className="flex items-center justify-center h-[calc(100vh-100px)]">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
@@ -62,14 +60,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      
-      {/* Main Content */}
-      <div className="flex-grow ml-64 p-8 overflow-y-auto">
-        <AdminHeader title="Overview" subtitle={`Welcome back, ${user?.firstName}.`} />
-
-        {/* Stats Grid - Compact */}
+    <AdminLayout title="Overview" subtitle={`Welcome back, ${user?.firstName}.`}>
+      {/* Stats Grid - Compact */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statCards.map((stat, index) => (
             <div key={index} className="bg-white p-5 rounded-[1.25rem] shadow-sm border border-gray-50 hover:shadow-lg transition-all duration-300 group">
@@ -156,9 +148,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
-
-    </div>
+    </AdminLayout>
   );
 };
 

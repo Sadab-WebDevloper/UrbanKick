@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 import { X, AlertCircle } from 'lucide-react';
 
 const AdminOrders = () => {
@@ -54,13 +53,10 @@ const AdminOrders = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-grow ml-64 p-8">
-        <AdminHeader 
-          title="Orders Management" 
-          subtitle="View and update customer orders"
-        />
+    <AdminLayout 
+      title="Orders Management" 
+      subtitle="View and update customer orders"
+    >
 
         <div className="bg-white rounded-[2rem] shadow-sm border border-gray-50 p-8">
           {error && <div className="mb-6 text-red-500 font-bold">{error}</div>}
@@ -116,8 +112,6 @@ const AdminOrders = () => {
             </div>
           )}
         </div>
-      </div>
-
       {showModal && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-primary/20 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 max-w-sm w-full p-6 animate-slide-up relative">
@@ -153,7 +147,7 @@ const AdminOrders = () => {
           </div>
         </div>
       )}
-    </div>
+    </AdminLayout>
   );
 };
 

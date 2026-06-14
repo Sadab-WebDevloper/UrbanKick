@@ -10,8 +10,7 @@ import {
 } from 'lucide-react';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 
 const ProductForm = () => {
   const { token } = useAuth();
@@ -19,6 +18,18 @@ const ProductForm = () => {
   const { id } = useParams();
   const isEditMode = !!id;
   const fileInputRef = useRef(null);
+  const categoryRef = useRef(null);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+        setIsCategoryOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -132,14 +143,10 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      
-      <div className="flex-grow ml-64 p-8">
-        <AdminHeader 
-          title={isEditMode ? 'Edit Sneaker' : 'Add New Sneaker'} 
-          subtitle={isEditMode ? 'Update product information' : 'Create a new inventory item'}
-        />
+    <AdminLayout 
+      title={isEditMode ? 'Edit Sneaker' : 'Add New Sneaker'} 
+      subtitle={isEditMode ? 'Update product information' : 'Create a new inventory item'}
+    >
 
         {/* Form Content */}
         <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8 animate-fade-in w-full">
@@ -213,17 +220,40 @@ const ProductForm = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Category</label>
-                    <div className="relative">
-                      <select 
-                        required
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-6 pr-10 text-sm font-bold text-primary outline-none focus:border-accent focus:bg-white transition-all shadow-sm appearance-none cursor-pointer"
+                    <div className="relative" ref={categoryRef}>
+                      <div 
+                        onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                        className={`w-full bg-gray-50 border ${isCategoryOpen ? 'border-accent bg-white' : 'border-gray-100'} rounded-2xl py-4 pl-6 pr-10 text-sm font-bold ${formData.category ? 'text-primary' : 'text-gray-400'} outline-none transition-all shadow-sm cursor-pointer flex items-center justify-between`}
                       >
-                        <option value="">Select Category</option>
-                        {categories.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
-                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                        <span>{formData.category || 'Select Category'}</span>
+                        <ChevronDown className={`w-5 h-5 text-gray-400 pointer-events-none transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+                      </div>
+                      
+                      {isCategoryOpen && (
+                        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden animate-fade-in">
+                          <div 
+                            className="px-6 py-3 text-sm font-bold text-gray-400 hover:bg-gray-50 cursor-pointer transition-colors"
+                            onClick={() => {
+                              setFormData({ ...formData, category: '' });
+                              setIsCategoryOpen(false);
+                            }}
+                          >
+                            Select Category
+                          </div>
+                          {categories.map(c => (
+                            <div 
+                              key={c}
+                              className={`px-6 py-3 text-sm font-bold cursor-pointer transition-colors ${formData.category === c ? 'bg-accent/10 text-accent' : 'text-primary hover:bg-gray-50'}`}
+                              onClick={() => {
+                                setFormData({ ...formData, category: c });
+                                setIsCategoryOpen(false);
+                              }}
+                            >
+                              {c}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -300,8 +330,7 @@ const ProductForm = () => {
             </div>
           </div>
         </form>
-      </div>
-    </div>
+    </AdminLayout>
   );
 };
 

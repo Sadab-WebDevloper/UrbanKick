@@ -14,8 +14,7 @@ import {
 } from 'lucide-react';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 
 const AdminUsers = () => {
   const { token } = useAuth();
@@ -114,10 +113,8 @@ const AdminUsers = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      
-      <div className="flex-grow ml-64 p-8 relative">
+    <AdminLayout title="Customer Management" subtitle="Manage user access and track customer registrations.">
+      <div className="relative">
         {/* Toast Notification */}
         {toast.show && (
           <div className={`fixed top-8 right-8 z-[200] flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-2xl border animate-slide-in-right ${
@@ -277,8 +274,7 @@ const AdminUsers = () => {
           </div>
         )}
 
-        <AdminHeader title="Customer Management" subtitle="Manage user access and track customer registrations.">
-        </AdminHeader>
+
 
         {/* Filters */}
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-50 mb-6">
@@ -400,7 +396,7 @@ const AdminUsers = () => {
           </table>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 

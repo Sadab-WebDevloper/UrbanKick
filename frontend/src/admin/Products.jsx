@@ -11,8 +11,7 @@ import {
 } from 'lucide-react';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
-import AdminHeader from '../components/AdminHeader';
+import AdminLayout from '../components/AdminLayout';
 
 const AdminProducts = () => {
   const { token } = useAuth();
@@ -66,19 +65,19 @@ const AdminProducts = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      
-      <div className="flex-grow ml-64 p-8">
-        <AdminHeader title="Inventory" subtitle="Manage your sneakers and stock levels.">
-          <button 
-            onClick={() => navigate('/admin/products/new')}
-            className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Product</span>
-          </button>
-        </AdminHeader>
+    <AdminLayout 
+      title="Inventory" 
+      subtitle="Manage your sneakers and stock levels."
+      headerActions={
+        <button 
+          onClick={() => navigate('/admin/products/new')}
+          className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          <span>Add Product</span>
+        </button>
+      }
+    >
 
         {/* Filters - Compact */}
 
@@ -146,8 +145,6 @@ const AdminProducts = () => {
             </tbody>
           </table>
         </div>
-      </div>
-
       {showModal && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-primary/20 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 max-w-sm w-full p-6 animate-slide-up relative">
@@ -183,8 +180,7 @@ const AdminProducts = () => {
           </div>
         </div>
       )}
-
-    </div>
+    </AdminLayout>
   );
 };
 

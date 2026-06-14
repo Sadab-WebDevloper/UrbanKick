@@ -13,7 +13,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import LogoutModal from './LogoutModal';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { logout } = useAuth();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -28,7 +28,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white h-screen fixed left-0 top-0 border-r border-gray-100 flex flex-col z-[60]">
+    <div className={`w-64 bg-white h-screen fixed left-0 top-0 border-r border-gray-100 flex flex-col z-[60] transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
       {/* Logo */}
       <div className="p-6">
         <Link to="/" className="flex items-center">
@@ -47,6 +47,7 @@ const Sidebar = () => {
             <Link
               key={item.name}
               to={item.path}
+              onClick={() => onClose && onClose()}
               className={`flex items-center justify-between px-3 py-3 rounded-2xl transition-all duration-300 group ${
                 isActive 
                   ? 'bg-primary text-white shadow-xl shadow-primary/20' 
